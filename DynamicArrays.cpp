@@ -64,9 +64,14 @@ void createArray(int**& array, int*& numColumns, int& numRows, std::string input
     }
 
     // Allocating memory for 2-d dynamic array structure.
+    //Added check to try account for rows without columns
     array = new int*[numRows];
     for (int i = 0; i < numRows; i++) {
-        array[i] = new int[numColumns[i]];
+        if (numColumns[i] > 0) {
+            array[i] = new int[numColumns[i]];
+        } else {
+            array[i] = NULL;
+        }
     }
 
     // Populate the array
@@ -92,8 +97,11 @@ void createArray(int**& array, int*& numColumns, int& numRows, std::string input
         }
         strI++;
     }
+    //checking if the column I try access even exists
     if (ss.str().length() > 0) {
-        ss >> array[rI][cI];
+        if (numColumns[rI] > 0) {
+            ss >> array[rI][cI];
+        }
     }
 }
 
