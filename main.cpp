@@ -36,7 +36,7 @@ void createAndDestroyTest() {
     destroyArray(array, numColumns, numRows);
     assertNULL(array);
     assertNULL(numColumns);
-    assert(0, numRows);
+    cassert(0, numRows);
 
     endSuite();
 }

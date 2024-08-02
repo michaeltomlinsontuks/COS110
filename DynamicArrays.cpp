@@ -58,7 +58,9 @@ void createArray(int**& array, int*& numColumns, int& numRows, std::string input
         strI++;
     }
     for (int i = 0; i < numRows; i++) {
-        numColumns[i]++;
+        if (numColumns[i] > 0) {
+            numColumns[i]++;
+        }
     }
 
     // Allocating memory for 2-d dynamic array structure.
@@ -68,18 +70,30 @@ void createArray(int**& array, int*& numColumns, int& numRows, std::string input
     }
 
     // Populate the array
+    // Stringstream implementation, ticket told me to.
     strI = 0;
     rI = 0;
     int cI = 0;
+    std::stringstream ss;
     while (input[strI] != '\0') {
         if (input[strI] != '|' && input[strI] != ',') {
-            array[rI][cI] = input[strI] - '0';
-            cI++;
-        } else if (input[strI] == '|') {
-            rI++;
-            cI = 0;
+            ss << input[strI];
+        } else {
+            if (ss.str().length() > 0) {
+                ss >> array[rI][cI];
+                ss.clear();
+                ss.str("");
+                cI++;
+            }
+            if (input[strI] == '|') {
+                rI++;
+                cI = 0;
+            }
         }
         strI++;
+    }
+    if (ss.str().length() > 0) {
+        ss >> array[rI][cI];
     }
 }
 
@@ -317,7 +331,7 @@ int rowMax(int**& array, int*& numColumns, int& numRows, int rowNumber) {
     }
 
     // Find the maximum value in the specified row
-    if(array[rowNumber][0] != NULL) {
+    if(numColumns[rowNumber] > 0) {
         int maxVal = array[rowNumber][0];
         for (int i = 1; i < numColumns[rowNumber]; ++i) {
             if (array[rowNumber][i] > maxVal) {
@@ -340,7 +354,7 @@ int rowMin(int**& array, int*& numColumns, int& numRows, int rowNumber) {
     }
 
     // Find the minimum value in the specified row
-    if(array[rowNumber][0] != NULL){
+    if(numColumns[rowNumber] > 0){
     int minVal = array[rowNumber][0];
     for (int i = 1; i < numColumns[rowNumber]; ++i) {
         if (array[rowNumber][i] < minVal) {
